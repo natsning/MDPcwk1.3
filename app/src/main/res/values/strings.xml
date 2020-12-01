@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Recipe_hfyst1</string>
+    <string name="button_filter_title">Filter by title</string>
+    <string name="button_filter_rating">Filter by rating</string>
+    <string name="button_ingredient">View All Ingredients</string>
+    <string name="cd_fab_add" />
+    <string name="header_main">Recipes</string>
+    <string name="insert_title">"Title: "</string>
+    <string name="insert_instructions">Instructions: </string>
+    <string name="insert_ingredients">"Ingredients: "</string>
+    <string name="button_insert">Confirm</string>
+</resources>
