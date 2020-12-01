@@ -2,10 +2,13 @@ package com.example.recipe_hfyst1;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class InsertActivity extends AppCompatActivity {
 
@@ -18,6 +21,21 @@ public class InsertActivity extends AppCompatActivity {
 
     public void onClickConfirm(View v){
         Log.d(TAG,"on click confirm");
+        EditText recipe_title = findViewById(R.id.field_title);
+        EditText recipe_ins = findViewById(R.id.field_instructions);
+        EditText recipe_ing = findViewById(R.id.field_ingredients);
+
+        // title and ingredients cannot be empty
+        if(recipe_title.getText().toString().isEmpty()||recipe_ing.getText().toString().isEmpty()){
+            Toast.makeText(this,R.string.toast_empty_error,Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+
+
+        Intent intent = new Intent(this,MainActivity.class);
+        startActivity(intent);
+
 
     }
 }
