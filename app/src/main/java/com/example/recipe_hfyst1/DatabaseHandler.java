@@ -60,6 +60,23 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return recipeList;
     }
 
+    public List<Ingredient> getAllIngredient(){
+        List<Ingredient> ingList = new ArrayList<>();
+        Cursor cursor = cr.query(RecipeContract.INGREDIENT_URI, null, null, null, null);
+        Log.d(TAG,"SELECT INGREDIENTs Query executed");
+
+        if(cursor!=null){
+            if(cursor.moveToFirst()){
+                do{
+                    Ingredient ing = new Ingredient(cursor.getInt(cursor.getColumnIndex(RecipeContract.INGREDIENT_ID)),
+                                    cursor.getString(cursor.getColumnIndex(RecipeContract.INGREDIENT_NAME)));
+                    ingList.add(ing);
+                }while(cursor.moveToNext());
+            }
+        }
+        return ingList;
+    }
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 

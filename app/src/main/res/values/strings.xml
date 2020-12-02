@@ -10,5 +10,7 @@
     <string name="insert_ingredients">"Ingredients: "</string>
     <string name="button_insert">Confirm</string>
     <string name="toast_empty_error">Cannot be empty</string>
+    <string name="header_ingredients">Ingredients</string>
+    <string name="cd_button_back">Back</string>
 
 </resources>

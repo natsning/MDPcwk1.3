@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         for(Recipe r: recipeList){
             displayList.add(r.getName() + ",  "+ r.getRating()+"-star");
         }
-        lv.setAdapter(new ArrayAdapter<>(this, R.layout.my_simple_list, displayList));
+        lv.setAdapter(new ArrayAdapter<>(this, R.layout.recipe_list_view, displayList));
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> myAdapter, View view, int position, long id) {
                 Recipe selectedRecipe = recipeList.get(position);
@@ -69,7 +69,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickIngredients(View v){
-
+        Intent intent = new Intent(this,IngredientActivity.class);
+        startActivity(intent);
     }
 
     @Override
