@@ -12,11 +12,14 @@ import android.widget.Toast;
 
 public class InsertActivity extends AppCompatActivity {
 
+    private DatabaseHandler db;
     private final String TAG = "Insert Activity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_insert);
+
+        db = new DatabaseHandler(this,null,null,1);
     }
 
     public void onClickConfirm(View v){
@@ -31,10 +34,10 @@ public class InsertActivity extends AppCompatActivity {
             return;
         }
 
+        Recipe r = new Recipe(recipe_title.getText().toString(),recipe_ins.getText().toString());
+        db.insertRecipe(r);
 
-
-        Intent intent = new Intent(this,MainActivity.class);
-        startActivity(intent);
+        finish();
 
 
     }
