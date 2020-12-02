@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.net.Uri;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -23,7 +24,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        Log.d(TAG,"oncreate databasehandler");
         db.execSQL(RecipeContract.CREATE_RECIPE_TABLE);
         db.execSQL(RecipeContract.CREATE_INGREDIENT_TABLE);
         db.execSQL(RecipeContract.CREATE_RECIPE_INGREDIENT_TABLE);
@@ -65,10 +65,49 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     }
 
-    public void insertRecipe(Recipe recipe){
+    public int insertRecipe(Recipe recipe){
         ContentValues values = new ContentValues();
         values.put(RecipeContract.RECIPE_NAME, recipe.getName());
         values.put(RecipeContract.RECIPE_INSTRUCTIONS, recipe.getInstructions());
-        cr.insert(RecipeContract.RECIPE_URI, values);
+        Uri uriContainingID = cr.insert(RecipeContract.RECIPE_URI, values);
+
+        if(uriContainingID!=null){
+            return idExtractor(uriContainingID);
+        }
+        return -1;
+    }
+
+    public int checkIngredientExist(String ingredient_name){
+        Cursor c = cr.query(RecipeContract.INGREDIENT_URI,null,
+                RecipeContract.INGREDIENT_NAME+"= '"+ingredient_name+"'",
+                null,null);
+        if(c!=null && c.moveToFirst()){
+            return c.getInt(c.getColumnIndex(RecipeContract.INGREDIENT_ID));
+        }else{
+            return -1;
+        }
+    }
+
+    public int insertIngredient(String ingredient){
+        ContentValues values = new ContentValues();
+        values.put(RecipeContract.INGREDIENT_NAME, ingredient);
+        Uri uriContainingID = cr.insert(RecipeContract.INGREDIENT_URI,values);
+
+        if(uriContainingID!=null){
+            return idExtractor(uriContainingID);
+        }
+        return -1;
+    }
+
+    public void insertRecipeIngredient(int r_id, int ing_id){
+        ContentValues values = new ContentValues();
+        values.put(RecipeContract.RECIPE_INGREDIENTS_RECIPE_ID,r_id);
+        values.put(RecipeContract.RECIPE_INGREDIENTS_INGREDIENT_ID,ing_id);
+        cr.insert(RecipeContract.RECIPE_INGREDIENTS_URI,values);
+    }
+
+    private int idExtractor(Uri uri){
+        int index = uri.toString().lastIndexOf("/");
+        return Integer.parseInt(uri.toString().substring(index+1));
     }
 }

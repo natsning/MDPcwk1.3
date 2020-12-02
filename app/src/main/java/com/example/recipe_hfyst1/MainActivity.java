@@ -18,20 +18,19 @@ public class MainActivity extends AppCompatActivity {
 
     private final String TAG = "MainActivity";
     private ListView lv;
+    private DatabaseHandler databaseHandler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        databaseHandler = new DatabaseHandler(this,null,null,1);
 
         lv = findViewById(R.id.recipeListView);
-        setRecipeListView();
+        setRecipeListView("Title");
     }
 
-    private void setRecipeListView(){
-        Log.d(TAG,"before create database handler");
-        DatabaseHandler databaseHandler = new DatabaseHandler(this,null,null,1);
-        final List<Recipe> recipeList = databaseHandler.getAllRecipe("Title");
-
+    private void setRecipeListView(String sortOrder){
+        final List<Recipe> recipeList = databaseHandler.getAllRecipe(sortOrder);
         if(recipeList.size()<=0){
             Toast.makeText(this,"No recipes found.",Toast.LENGTH_SHORT).show();
             return;
@@ -40,16 +39,15 @@ public class MainActivity extends AppCompatActivity {
         // parse into string format for display
         List<String> displayList = new ArrayList<>();
         for(Recipe r: recipeList){
-            displayList.add(r.getName() + ", "+ r.getRating());
+            displayList.add(r.getName() + ",  "+ r.getRating()+"-star");
         }
         lv.setAdapter(new ArrayAdapter<>(this, R.layout.my_simple_list, displayList));
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> myAdapter, View view, int position, long id) {
-//                Recipe selectedFromList = (Recipe) lv.getItemAtPosition(position);
                 Recipe selectedRecipe = recipeList.get(position);
                 Log.d(TAG, "Selects " + selectedRecipe.get_id());
 
-                Intent det = new Intent(getApplicationContext(), DetailsActivity.class);
+                Intent det = new Intent(getApplicationContext(), ViewRateActivity.class);
                 det.putExtra("id", selectedRecipe.get_id());
                 startActivity(det);
             }
@@ -63,14 +61,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickFilterTitle(View v){
-
+        setRecipeListView("Title");
     }
 
     public void onClickFilterRating(View v){
-
+        setRecipeListView("Rating");
     }
 
     public void onClickIngredients(View v){
 
+    }
+
+    @Override
+    protected void onResume() {
+        setRecipeListView("Title");
+        super.onResume();
     }
 }

@@ -62,9 +62,17 @@ public final class RecipeContract {
     public static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
     public static final int UM_RECIPE_TABLE = 1;
     public static final int UM_RECIPE_ID = 2;
+    public static final int UM_INGREDIENT_TABLE = 11;
+    public static final int UM_INGREDIENT_ID = 12;
+    public static final int UM_RECIPE_INGREDIENT_TABLE = 21;
+    public static final int UM_RECIPE_INGREDIENT_ID = 22;
     static {
         uriMatcher.addURI(AUTHORITY, RECIPE_TABLE, UM_RECIPE_TABLE);
         uriMatcher.addURI(AUTHORITY, RECIPE_TABLE + "/#", UM_RECIPE_ID);
+        uriMatcher.addURI(AUTHORITY, INGREDIENT_TABLE, UM_INGREDIENT_TABLE);
+        uriMatcher.addURI(AUTHORITY, INGREDIENT_TABLE + "/#", UM_INGREDIENT_ID);
+        uriMatcher.addURI(AUTHORITY, RECIPE_INGREDIENT_TABLE, UM_RECIPE_INGREDIENT_TABLE);
+        uriMatcher.addURI(AUTHORITY, RECIPE_INGREDIENT_TABLE + "/#", UM_RECIPE_INGREDIENT_ID);
     }
 
 }

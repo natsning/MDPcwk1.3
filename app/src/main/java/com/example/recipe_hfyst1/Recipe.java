@@ -54,5 +54,12 @@ public class Recipe {
         this.rating = rating;
     }
 
+    public String getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(String ingredients) {
+        this.ingredients = ingredients;
+    }
 
 }

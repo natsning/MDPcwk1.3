@@ -34,11 +34,26 @@ public class InsertActivity extends AppCompatActivity {
             return;
         }
 
-        Recipe r = new Recipe(recipe_title.getText().toString(),recipe_ins.getText().toString());
-        db.insertRecipe(r);
+        // insert recipe
+        Recipe r = new Recipe(recipe_title.getText().toString(),
+                            recipe_ins.getText().toString());
+        int recipe_id = db.insertRecipe(r);
+
+        // insert ingredient and recipe_ingredient
+        String[] ingredients = recipe_ing.getText().toString().split("\\r?\\n");
+        for(String ingredient : ingredients) {
+
+            int ing_id = db.checkIngredientExist(ingredient);
+
+            if(ing_id==-1){ //ingredient not exist
+                 ing_id = db.insertIngredient(ingredient);
+            }
+
+            db.insertRecipeIngredient(recipe_id, ing_id);
+
+        }
 
         finish();
-
-
     }
+
 }

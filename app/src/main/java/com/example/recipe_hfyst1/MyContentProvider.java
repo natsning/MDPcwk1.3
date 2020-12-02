@@ -48,7 +48,12 @@ public class MyContentProvider extends ContentProvider {
             case RecipeContract.UM_RECIPE_ID:
                 queryBuilder.appendWhere(RecipeContract.RECIPE_ID+ '=' + uri.getLastPathSegment());
                 break;
+            case RecipeContract.UM_INGREDIENT_ID:
+                queryBuilder.appendWhere(RecipeContract.INGREDIENT_ID+ '=' + uri.getLastPathSegment());
+                break;
             case RecipeContract.UM_RECIPE_TABLE:
+            case RecipeContract.UM_INGREDIENT_TABLE:
+            case RecipeContract.UM_RECIPE_INGREDIENT_TABLE:
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI");
@@ -69,7 +74,6 @@ public class MyContentProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
-        //TODO:
         int uriType = RecipeContract.uriMatcher.match(uri);
         database = databaseHandler.getWritableDatabase();
         long id = 0;
@@ -78,12 +82,20 @@ public class MyContentProvider extends ContentProvider {
             case RecipeContract.UM_RECIPE_TABLE:
                 id = database.insert(RecipeContract.RECIPE_TABLE, null, values);
                 break;
+            case RecipeContract.UM_INGREDIENT_TABLE:
+                id = database.insert(RecipeContract.INGREDIENT_TABLE,null,values);
+                break;
+            case RecipeContract.UM_RECIPE_INGREDIENT_TABLE:
+                database.insert(RecipeContract.RECIPE_INGREDIENT_TABLE,null,values);
+                id = -2;
+            case RecipeContract.UM_RECIPE_ID:
+            case RecipeContract.UM_INGREDIENT_ID:
+                break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
         getContext().getContentResolver().notifyChange(uri, null);
         return Uri.parse(RecipeContract.RECIPE_TABLE + "/" + id);
-//        return null;
     }
 
     @Override
