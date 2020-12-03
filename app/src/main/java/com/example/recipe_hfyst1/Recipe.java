@@ -5,7 +5,6 @@ public class Recipe {
     private int _id;
     private String name;
     private String instructions;
-    private String ingredients;
     private int rating = 0;
 
     public Recipe(){}
@@ -52,14 +51,6 @@ public class Recipe {
 
     public void setRating(int rating) {
         this.rating = rating;
-    }
-
-    public String getIngredients() {
-        return ingredients;
-    }
-
-    public void setIngredients(String ingredients) {
-        this.ingredients = ingredients;
     }
 
 }

@@ -39,6 +39,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorLightAccent"
+                android:padding="2dp"
                 android:ems="10"
                 android:importantForAutofill="no"
                 android:inputType="textPersonName" />
@@ -56,7 +57,7 @@
         <EditText
             android:id="@+id/field_instructions"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="100dp"
             android:background="@color/colorLightAccent"
             android:ems="10"
             android:gravity="start|top"
@@ -91,6 +92,18 @@
             android:layout_gravity="end"/>
 
     </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/imageButton3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:background="@color/colorPrimary"
+        android:onClick="onClickBackInsert"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_back" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

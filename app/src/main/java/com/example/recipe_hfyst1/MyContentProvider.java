@@ -105,6 +105,19 @@ public class MyContentProvider extends ContentProvider {
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
+        int uriType = RecipeContract.uriMatcher.match(uri);
+        database = databaseHandler.getWritableDatabase();
+
+        int rowsUpdated = 0;
+        switch (uriType) {
+            case RecipeContract.UM_RECIPE_TABLE:
+                rowsUpdated = database.update(RecipeContract.RECIPE_TABLE, values, selection, selectionArgs);
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown URI: " + uri);
+        }
+        getContext().getContentResolver().notifyChange(uri,
+                null);
+        return rowsUpdated;
     }
 }

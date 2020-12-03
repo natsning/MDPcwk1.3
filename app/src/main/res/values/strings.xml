@@ -12,5 +12,6 @@
     <string name="toast_empty_error">Cannot be empty</string>
     <string name="header_ingredients">Ingredients</string>
     <string name="cd_button_back">Back</string>
+    <string name="header_rate">Rate it!</string>
 
 </resources>

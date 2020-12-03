@@ -44,12 +44,12 @@ public class MainActivity extends AppCompatActivity {
         lv.setAdapter(new ArrayAdapter<>(this, R.layout.recipe_list_view, displayList));
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> myAdapter, View view, int position, long id) {
-                Recipe selectedRecipe = recipeList.get(position);
-                Log.d(TAG, "Selects " + selectedRecipe.get_id());
 
-                Intent det = new Intent(getApplicationContext(), ViewRateActivity.class);
-                det.putExtra("id", selectedRecipe.get_id());
-                startActivity(det);
+                Recipe selectedRecipe = recipeList.get(position);
+
+                Intent intent = new Intent(getApplicationContext(), ViewRateActivity.class);
+                intent.putExtra("id", selectedRecipe.get_id());
+                startActivity(intent);
             }
         });
 

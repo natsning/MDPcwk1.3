@@ -37,7 +37,7 @@ public class IngredientActivity extends AppCompatActivity {
         lv.setAdapter(new ArrayAdapter<>(this, R.layout.ingredient_list_view, displayList));
     }
 
-    public void onClickBack(View v){
+    public void onClickBackIng(View v){
         finish();
     }
 }

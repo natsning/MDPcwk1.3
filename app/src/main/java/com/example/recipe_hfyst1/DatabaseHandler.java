@@ -44,17 +44,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                     RecipeContract.RECIPE_RATING+" DESC");
         }
 
-        if(cursor!=null){
-            if(cursor.moveToFirst()){
-                do{
-                    Recipe r = new Recipe(cursor.getInt(cursor.getColumnIndex(RecipeContract.RECIPE_ID)),
-                                    cursor.getString(cursor.getColumnIndex(RecipeContract.RECIPE_NAME)),
-                                    cursor.getString(cursor.getColumnIndex(RecipeContract.RECIPE_INSTRUCTIONS)),
-                                    cursor.getInt(cursor.getColumnIndex(RecipeContract.RECIPE_RATING))
-                                );
-                    recipeList.add(r);
-                }while(cursor.moveToNext());
-            }
+        if(cursor!=null && cursor.moveToFirst()){
+            do{
+                Recipe r = new Recipe(cursor.getInt(cursor.getColumnIndex(RecipeContract.RECIPE_ID)),
+                                cursor.getString(cursor.getColumnIndex(RecipeContract.RECIPE_NAME)),
+                                cursor.getString(cursor.getColumnIndex(RecipeContract.RECIPE_INSTRUCTIONS)),
+                                cursor.getInt(cursor.getColumnIndex(RecipeContract.RECIPE_RATING))
+                            );
+                recipeList.add(r);
+            }while(cursor.moveToNext());
+            cursor.close();
         }
 
         return recipeList;
@@ -65,16 +64,41 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         Cursor cursor = cr.query(RecipeContract.INGREDIENT_URI, null, null, null, null);
         Log.d(TAG,"SELECT INGREDIENTs Query executed");
 
-        if(cursor!=null){
-            if(cursor.moveToFirst()){
-                do{
-                    Ingredient ing = new Ingredient(cursor.getInt(cursor.getColumnIndex(RecipeContract.INGREDIENT_ID)),
-                                    cursor.getString(cursor.getColumnIndex(RecipeContract.INGREDIENT_NAME)));
-                    ingList.add(ing);
-                }while(cursor.moveToNext());
-            }
+        if(cursor!=null && cursor.moveToFirst() ){
+            do{
+                Ingredient ing = new Ingredient(cursor.getInt(cursor.getColumnIndex(RecipeContract.INGREDIENT_ID)),
+                                cursor.getString(cursor.getColumnIndex(RecipeContract.INGREDIENT_NAME)));
+                ingList.add(ing);
+            }while(cursor.moveToNext());
+            cursor.close();
         }
         return ingList;
+    }
+
+    public Recipe findRecipe(int id){
+        String selection = RecipeContract.RECIPE_ID + "='"+ id + "'";
+        Cursor c = cr.query(RecipeContract.RECIPE_URI,null,selection,null,null);
+        if(c!=null && c.moveToFirst()){
+            Recipe r = new Recipe(
+                    c.getInt(c.getColumnIndex(RecipeContract.RECIPE_ID)),
+                    c.getString(c.getColumnIndex(RecipeContract.RECIPE_NAME)),
+                    c.getString(c.getColumnIndex(RecipeContract.RECIPE_INSTRUCTIONS)),
+                    c.getInt(c.getColumnIndex(RecipeContract.RECIPE_RATING))
+            );
+            c.close();
+            return  r;
+        }
+        return null;
+    }
+
+    public int updateRating(Recipe recipe){
+        ContentValues values = new ContentValues();
+        values.put(RecipeContract.RECIPE_RATING, recipe.getRating());
+
+        String selection = RecipeContract.RECIPE_ID + " = '" + recipe.get_id() + "'";
+
+        // returns the number of rows updated, should be 1
+        return cr.update(RecipeContract.RECIPE_URI, values, selection, null);
     }
 
     @Override
@@ -86,6 +110,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(RecipeContract.RECIPE_NAME, recipe.getName());
         values.put(RecipeContract.RECIPE_INSTRUCTIONS, recipe.getInstructions());
+        values.put(RecipeContract.RECIPE_RATING,recipe.getRating());
         Uri uriContainingID = cr.insert(RecipeContract.RECIPE_URI, values);
 
         if(uriContainingID!=null){
@@ -99,7 +124,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 RecipeContract.INGREDIENT_NAME+"= '"+ingredient_name+"'",
                 null,null);
         if(c!=null && c.moveToFirst()){
-            return c.getInt(c.getColumnIndex(RecipeContract.INGREDIENT_ID));
+            int id = c.getInt(c.getColumnIndex(RecipeContract.INGREDIENT_ID));
+            c.close();
+            return id;
         }else{
             return -1;
         }
