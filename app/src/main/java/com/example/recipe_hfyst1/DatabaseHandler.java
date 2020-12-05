@@ -30,6 +30,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         Log.d(TAG,"Tables created");
     }
 
+    /**
+     * Queries contentResolver to access to the database. SortOrder determines the different SQL query method.
+     * Extracts the cursor and puts data into instantiating Recipe class.
+     * See also {@link Recipe}, {@link MyContentProvider #query}
+     * @param sortOrder "Title" or "Rating"
+     * @return list of Recipe
+     */
     public List<Recipe> getAllRecipe(String sortOrder){
         List<Recipe> recipeList = new ArrayList<>();
         Cursor cursor;
@@ -59,6 +66,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return recipeList;
     }
 
+    /**
+     * Queries content resolver for a recipe by using its ID.
+     * See also {@link Recipe}, {@link MyContentProvider #query}
+     * @param id Recipe ID
+     * @return the Recipe
+     */
     public Recipe getRecipe(int id){
         String selection = RecipeContract.RECIPE_ID + "='"+ id + "'";
         Cursor c = cr.query(RecipeContract.RECIPE_URI,null,selection,null,null);
@@ -75,6 +88,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return null;
     }
 
+    /**
+     * Queries the content resolver for all the unique ingredients.
+     * Instantiates Ingredient class and puts them into a list.
+     * See also {@link Ingredient}, {@link MyContentProvider}
+     * @return arrayList of Ingredients
+     */
     public List<Ingredient> getAllIngredient(){
         List<Ingredient> ingList = new ArrayList<>();
         Cursor cursor = cr.query(RecipeContract.INGREDIENT_URI, null, null, null, null);
@@ -91,6 +110,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return ingList;
     }
 
+    /**
+     * Performs a raw query to the database with joint table where the relation between the targeted recipe
+     * and its ingredients are taken care of.
+     * See also {@link Recipe}, {@link Ingredient},{@link MyContentProvider #query}
+     * @param recipeID target recipe ID
+     * @return a list of ingredients that are used by the recipe
+     */
     public List<Ingredient> getRecipeIngredient(int recipeID){
         List<Ingredient> ingList = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
@@ -108,6 +134,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return ingList;
     }
 
+    /**
+     * Updates the rating of a recipe by the setter method through content resolver.
+     * See also {@link Recipe}, {@link MyContentProvider}
+     * @param recipe target recipe
+     * @return should return value 1 to indicate the number of rows updated
+     */
     public int updateRating(Recipe recipe){
         ContentValues values = new ContentValues();
         values.put(RecipeContract.RECIPE_RATING, recipe.getRating());

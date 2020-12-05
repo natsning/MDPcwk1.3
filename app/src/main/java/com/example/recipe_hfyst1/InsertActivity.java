@@ -20,6 +20,15 @@ public class InsertActivity extends AppCompatActivity {
         db = new DatabaseHandler(this,null,null,1);
     }
 
+    /**
+     * Handles on click confirm to insert recipe into database.
+     * Ensures that name field and ingredient fields are not empty.
+     * Extracts input from user and sends to database to be inserted.
+     * Ingredients are checked before they inserted to avoid duplicates.
+     * Returns to previous activity.
+     * See also {@link Recipe},{@link Ingredient}, {@link DatabaseHandler}
+     * @param v button
+     */
     public void onClickConfirm(View v){
         Log.d(TAG,"on click confirm");
         EditText recipe_title = findViewById(R.id.field_title);
@@ -54,6 +63,10 @@ public class InsertActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Handles onclick back, returns to previous activity without doing anything.
+     * @param v back button
+     */
     public void onClickBackInsert(View v){
         finish();
     }

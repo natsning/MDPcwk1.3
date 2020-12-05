@@ -29,6 +29,13 @@ public class MainActivity extends AppCompatActivity {
         setRecipeListView("Title");
     }
 
+    /**
+     * Queries the database for all the recipes.
+     * Extract the names and rating of recipes and format them into string before populating them into list view.
+     * Handles onCLick any of the recipes to view the details of recipe.
+     * See also {@link Recipe}, {@link DatabaseHandler#getAllRecipe}
+     * @param sortOrder the order of the recipes sorted, "Title" or "Rating"
+     */
     private void setRecipeListView(String sortOrder){
         final List<Recipe> recipeList = databaseHandler.getAllRecipe(sortOrder);
         if(recipeList.size()<=0){
@@ -55,19 +62,35 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Handles onClick add recipe
+     * @param v add button
+     */
     public void onClickAdd(View v){
         Intent intent = new Intent(this, InsertActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * Handles onClick filter by title
+     * @param v button
+     */
     public void onClickFilterTitle(View v){
         setRecipeListView("Title");
     }
 
+    /**
+     * handles onCLick filter by rating
+     * @param v button
+     */
     public void onClickFilterRating(View v){
         setRecipeListView("Rating");
     }
 
+    /**
+     * handles on click show all ingredients
+     * @param v button
+     */
     public void onClickIngredients(View v){
         Intent intent = new Intent(this,IngredientActivity.class);
         startActivity(intent);

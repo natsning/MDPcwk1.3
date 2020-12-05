@@ -32,6 +32,11 @@ public class ViewRateActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Queries database to get all the relevant details for a recipe using the recipe ID
+     * using {@link DatabaseHandler#getRecipe} and {@link #setIngredientListView}
+     * @param recipeID recipe ID
+     */
     private void setAllText(int recipeID){
         recipe = db.getRecipe(recipeID);
         if(recipe!=null){
@@ -46,6 +51,12 @@ public class ViewRateActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Uses recipeID to get the recipe's ingredients with {@link DatabaseHandler#getRecipeIngredient}.
+     * Extract the names of the returned Ingredients then populate it into a listView
+     * See also {@link Ingredient}
+     * @param recipeID recipe ID
+     */
     private void setIngredientListView(int recipeID){
         ListView lv = findViewById(R.id.viewRateIngredientsList);
         List<Ingredient> ingList = db.getRecipeIngredient(recipeID);
@@ -62,10 +73,20 @@ public class ViewRateActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Handles onClick back button to return to previous activity
+     * @param v back button
+     */
     public void onClickBackVR(View v){
         finish( );
     }
 
+    /**
+     * Handles onClick confirm button to confirm the rating value given.
+     * The rating will then be updated to the recipe.
+     * See also {@link Recipe}, {@link DatabaseHandler#updateRating}
+     * @param v confirm button
+     */
     public void onClickConfirmVR(View v){
         recipe.setRating((int)ratingBar.getRating());
         int rowsUpdated = db.updateRating(recipe);

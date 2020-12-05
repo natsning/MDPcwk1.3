@@ -20,6 +20,11 @@ public class IngredientActivity extends AppCompatActivity {
         setIngredientListView();
     }
 
+    /**
+     * Queries database handler for all the unique ingredients.
+     * Extract the names of ingredients and display them.
+     * See also {@link Ingredient}, {@link DatabaseHandler#getAllIngredient()}
+     */
     private void setIngredientListView(){
         DatabaseHandler databaseHandler = new DatabaseHandler(this,null,null,1);
         ListView lv = findViewById(R.id.ingredientListView);
@@ -37,6 +42,10 @@ public class IngredientActivity extends AppCompatActivity {
         lv.setAdapter(new ArrayAdapter<>(this, R.layout.ingredient_list_view, displayList));
     }
 
+    /**
+     * handles onClick Back button to return to previous activity
+     * @param v back button
+     */
     public void onClickBackIng(View v){
         finish();
     }
