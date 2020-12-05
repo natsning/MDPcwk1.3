@@ -59,6 +59,22 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return recipeList;
     }
 
+    public Recipe getRecipe(int id){
+        String selection = RecipeContract.RECIPE_ID + "='"+ id + "'";
+        Cursor c = cr.query(RecipeContract.RECIPE_URI,null,selection,null,null);
+        if(c!=null && c.moveToFirst()){
+            Recipe r = new Recipe(
+                    c.getInt(c.getColumnIndex(RecipeContract.RECIPE_ID)),
+                    c.getString(c.getColumnIndex(RecipeContract.RECIPE_NAME)),
+                    c.getString(c.getColumnIndex(RecipeContract.RECIPE_INSTRUCTIONS)),
+                    c.getInt(c.getColumnIndex(RecipeContract.RECIPE_RATING))
+            );
+            c.close();
+            return  r;
+        }
+        return null;
+    }
+
     public List<Ingredient> getAllIngredient(){
         List<Ingredient> ingList = new ArrayList<>();
         Cursor cursor = cr.query(RecipeContract.INGREDIENT_URI, null, null, null, null);
@@ -75,20 +91,21 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return ingList;
     }
 
-    public Recipe findRecipe(int id){
-        String selection = RecipeContract.RECIPE_ID + "='"+ id + "'";
-        Cursor c = cr.query(RecipeContract.RECIPE_URI,null,selection,null,null);
+    public List<Ingredient> getRecipeIngredient(int recipeID){
+        List<Ingredient> ingList = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "SELECT I.ingredientname FROM " + RecipeContract.JOINT_TABLE +" WHERE R._id = ?";
+        Cursor c = db.rawQuery(query,new String[]{String.valueOf(recipeID)});
         if(c!=null && c.moveToFirst()){
-            Recipe r = new Recipe(
-                    c.getInt(c.getColumnIndex(RecipeContract.RECIPE_ID)),
-                    c.getString(c.getColumnIndex(RecipeContract.RECIPE_NAME)),
-                    c.getString(c.getColumnIndex(RecipeContract.RECIPE_INSTRUCTIONS)),
-                    c.getInt(c.getColumnIndex(RecipeContract.RECIPE_RATING))
-            );
+            do {
+                Ingredient ing = new Ingredient(c.getString(c.getColumnIndex(RecipeContract.INGREDIENT_NAME)));
+                ingList.add(ing);
+            }while(c.moveToNext());
             c.close();
-            return  r;
         }
-        return null;
+
+
+        return ingList;
     }
 
     public int updateRating(Recipe recipe){
@@ -112,11 +129,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(RecipeContract.RECIPE_INSTRUCTIONS, recipe.getInstructions());
         values.put(RecipeContract.RECIPE_RATING,recipe.getRating());
         Uri uriContainingID = cr.insert(RecipeContract.RECIPE_URI, values);
-
-        if(uriContainingID!=null){
-            return idExtractor(uriContainingID);
-        }
-        return -1;
+        return idExtractor(uriContainingID);
     }
 
     public int checkIngredientExist(String ingredient_name){
@@ -136,11 +149,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(RecipeContract.INGREDIENT_NAME, ingredient);
         Uri uriContainingID = cr.insert(RecipeContract.INGREDIENT_URI,values);
-
-        if(uriContainingID!=null){
-            return idExtractor(uriContainingID);
-        }
-        return -1;
+        return idExtractor(uriContainingID);
     }
 
     public void insertRecipeIngredient(int r_id, int ing_id){
@@ -151,7 +160,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     private int idExtractor(Uri uri){
-        int index = uri.toString().lastIndexOf("/");
-        return Integer.parseInt(uri.toString().substring(index+1));
+        if(uri!=null && uri.getLastPathSegment()!=null){
+            return Integer.parseInt(uri.getLastPathSegment());
+        }
+        return -1;
     }
 }

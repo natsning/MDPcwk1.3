@@ -59,6 +59,21 @@ public final class RecipeContract {
                     RECIPE_INGREDIENTS_INGREDIENT_ID + ")"+
             " )";
 
+
+    public static final String JOINT_TABLE =
+                    RECIPE_TABLE + " R " +
+                    " LEFT OUTER JOIN " +
+                        RECIPE_INGREDIENT_TABLE + " RI " +
+                            "ON( "+
+                            "R."+ RECIPE_ID + " = "+ "RI."+ RECIPE_INGREDIENTS_RECIPE_ID +
+                            ")"+
+                    " LEFT OUTER JOIN " +
+                        INGREDIENT_TABLE + " I " +
+                            "ON( " +
+                            "RI." + RECIPE_INGREDIENTS_INGREDIENT_ID + "=" + "I." + INGREDIENT_ID +
+                            ")";
+
+
     public static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
     public static final int UM_RECIPE_TABLE = 1;
     public static final int UM_RECIPE_ID = 2;

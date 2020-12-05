@@ -39,10 +39,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorLightAccent"
-                android:padding="2dp"
                 android:ems="10"
                 android:importantForAutofill="no"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:padding="2dp"
+                android:textColor="@color/colorPrimaryDark" />
         </LinearLayout>
 
         <TextView

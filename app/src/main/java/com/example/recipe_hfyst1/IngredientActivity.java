@@ -26,7 +26,7 @@ public class IngredientActivity extends AppCompatActivity {
 
         final List<Ingredient> ingList = databaseHandler.getAllIngredient();
         if(ingList.size()<=0){
-            Toast.makeText(this,"No recipes found.",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"No ingredients found.",Toast.LENGTH_SHORT).show();
             return;
         }
         // parse into string format for display

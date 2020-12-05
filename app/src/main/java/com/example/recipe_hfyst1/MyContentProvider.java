@@ -81,21 +81,27 @@ public class MyContentProvider extends ContentProvider {
         {
             case RecipeContract.UM_RECIPE_TABLE:
                 id = database.insert(RecipeContract.RECIPE_TABLE, null, values);
-                break;
+                getContext().getContentResolver().notifyChange(uri, null);
+                return Uri.parse(RecipeContract.RECIPE_TABLE + "/" + id);
+
             case RecipeContract.UM_INGREDIENT_TABLE:
                 id = database.insert(RecipeContract.INGREDIENT_TABLE,null,values);
-                break;
+                getContext().getContentResolver().notifyChange(uri, null);
+                return Uri.parse(RecipeContract.INGREDIENT_TABLE + "/" + id);
+
             case RecipeContract.UM_RECIPE_INGREDIENT_TABLE:
                 database.insert(RecipeContract.RECIPE_INGREDIENT_TABLE,null,values);
                 id = -2;
+                getContext().getContentResolver().notifyChange(uri, null);
+                return Uri.parse(RecipeContract.RECIPE_INGREDIENT_TABLE + "/" + id);
+
             case RecipeContract.UM_RECIPE_ID:
             case RecipeContract.UM_INGREDIENT_ID:
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
-        getContext().getContentResolver().notifyChange(uri, null);
-        return Uri.parse(RecipeContract.RECIPE_TABLE + "/" + id);
+        return null;
     }
 
     @Override
